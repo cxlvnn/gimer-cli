@@ -62,9 +62,8 @@ func set_timer(minutes int) {
 func expand_path(path string) string {
 	if strings.HasPrefix(path, "~") {
 		home, err := os.UserHomeDir()
-		if err != nil {
-			fmt.Println(err.Error())
-			strings.Replace(path, "~", home, 1)
+		if err == nil {
+			return strings.Replace(path, "~", home, 1)
 		}
 	}
 	return path
