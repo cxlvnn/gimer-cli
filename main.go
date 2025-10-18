@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strings"
 
 	// "strconv"
 	"path/filepath"
@@ -29,7 +30,8 @@ func main() {
 		os.Exit(0)
 	}
 
-	check_path(*path_to_an_alarm)
+	path := expand_path(*path_to_an_alarm)
+	check_path(path)
 	alarm_path := filepath.Clean(*path_to_an_alarm)
 
 	if *time_amount_ptr < 1 {
@@ -55,6 +57,17 @@ func set_timer(minutes int) {
 
 	fmt.Println("The time is up!")
 
+}
+
+func expand_path(path string) string {
+	if strings.HasPrefix(path, "~") {
+		home, err := os.UserHomeDir()
+		if err != nil {
+			fmt.Println(err.Error())
+			strings.Replace(path, "~", home, 1)
+		}
+	}
+	return path
 }
 
 func check_path(path string) {
