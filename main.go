@@ -16,11 +16,20 @@ import (
 const DEF_VALUE_FOR_ALARM = 1
 const DEF_PATH_FOR_ALARM_SOUND = "its-time-to-stop.mp3"
 
+var help = flag.Bool("help", false, "show help information")
+
 func main() {
 	time_amount_ptr := flag.Int("time", DEF_VALUE_FOR_ALARM, "time - determine how long the timer runs for")
 	path_to_an_alarm := flag.String("path", DEF_PATH_FOR_ALARM_SOUND, "path - pick an alarm sound to play after the timer ends")
-	check_path(*path_to_an_alarm)
 	flag.Parse()
+
+	if *help {
+		fmt.Println("Usage of gimer-cli:")
+		flag.PrintDefaults()
+		os.Exit(0)
+	}
+
+	check_path(*path_to_an_alarm)
 	alarm_path := filepath.Clean(*path_to_an_alarm)
 
 	if *time_amount_ptr < 1 {
